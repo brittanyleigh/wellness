@@ -56,6 +56,8 @@ model User {
     role          String?   @default("user")
     accounts      Account[]
     sessions      Session[]
+    pomodoro      Pomodoro?
+    habits        Habit[]
 }
 
 model VerificationToken {
@@ -64,4 +66,32 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Habit {
+    id              String      @id @default(cuid())
+    userId          String
+    label           String
+    description     String?
+    link            String?
+    length          Int?
+    priority        Int?
+    repeat          Boolean?
+    enabled         Boolean     @default(true)
+    lastCompleted   DateTime?
+
+    user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Pomodoro {
+    id                  String      @id @default(cuid())
+    userId              String
+    focusLength         Int         @default(25)
+    breakLength         Int         @default(5)
+    longBreakLength     Int         @default(15)
+    autoStart           Boolean     @default(true)
+    numberOfSessions    Int         @default(4)
+    byPriority          Boolean?    @default(true)
+
+    user                User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
