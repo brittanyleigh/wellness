@@ -1,7 +1,21 @@
 import AppLayout from "@lib/components/Layouts/AppLayout";
-import Image from 'next/image';
+import { useQuery } from "react-query";
+import superagent from "superagent";
 
 const Page = () => {
+  const habitsQuery = useQuery(["habit/list"], async () => {
+    const data = await superagent.get("/api/habit/list").send();
+
+    return data.body;
+  });
+
+  console.log(habitsQuery.data);
+
+  const handleCreateHabit = async () => {
+    console.log("handle create habit");
+    const response = await superagent.post("/api/habit/create");
+  };
+
   return (
     <>
       <AppLayout>
@@ -12,12 +26,7 @@ const Page = () => {
           <a href={`https://next-auth.js.org`}>NextAuth.js</a> for
           authentication with PlanetScale and Prisma.
         </p>
-        <blockquote>
-          <p>  
-            You can find how to get started{" "}
-            <a href={`https://github.com/planetscale/nextjs-planetscale-starter`}>here</a>.
-          </p>
-        </blockquote>
+        <button onClick={handleCreateHabit}>Create Habit Test</button>
       </AppLayout>
     </>
   );
