@@ -2,10 +2,12 @@ import AppLayout from "@lib/components/Layouts/AppLayout";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import superagent from "superagent";
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 
 const Page = () => {
   const [label, setLabel] = useState("");
   const [length, setLength] = useState(5);
+  const [timerIsRunning, setTimerIsRunning] = useState(false);
   const habitsQuery = useQuery(["habit/list"], async () => {
     const data = await superagent.get("/api/habit/list").send();
 
@@ -33,14 +35,16 @@ const Page = () => {
   return (
     <>
       <AppLayout>
-        {/* <blockquote> */}
-        <h1>Welcome to the PlanetScale Next.js Starter App!</h1>
-        <p>
-          This is an example site to demonstrate how to use{" "}
-          <a href={`https://next-auth.js.org`}>NextAuth.js</a> for
-          authentication with PlanetScale and Prisma.
-        </p>
-        <form>
+        <CountdownCircleTimer
+          isPlaying={timerIsRunning}
+          duration={10}
+          colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+          colorsTime={[10, 5, 2, 0]}
+        >
+          {({ remainingTime }) => remainingTime}
+        </CountdownCircleTimer>
+        <button onClick={() =>setTimerIsRunning((current) => !current)}>Start/Pause</button>
+        {/* <form>
           <input
             type="text"
             onChange={(e) => setLabel(e.target.value)}
@@ -53,7 +57,7 @@ const Page = () => {
           />{" "}
           Minutes
         </form>
-        <button onClick={handleCreateHabit}>Create Habit Test</button>
+        <button onClick={handleCreateHabit}>Create Habit Test</button> */}
       </AppLayout>
     </>
   );
