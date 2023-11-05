@@ -14,7 +14,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 
-export const UpdateModal = ({ isOpen, onClose, toDo, refetch }) => {
+export const UpdateToDo = ({ isOpen, onClose, toDo, refetch }) => {
   const { status } = useSession({
     required: false,
   });

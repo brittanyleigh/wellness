@@ -22,8 +22,8 @@ import {
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import { FiEdit3, FiTrash2 } from "react-icons/fi";
-import { UpdateModal } from "@lib/components/Habit/UpdateModal";
-import { DeleteModal } from "@lib/components/Habit/DeleteModal";
+import { UpdateHabit } from "@lib/components/Habit/UpdateHabit";
+import { DeleteHabit } from "@lib/components/Habit/DeleteHabit";
 
 export const Habit = ({ habit, refetch }) => {
   const {
@@ -43,7 +43,7 @@ export const Habit = ({ habit, refetch }) => {
       <Button onClick={onUpdateOpen} size="sm" ml={3}>
         <Icon as={FiEdit3} />
       </Button>
-      <UpdateModal
+      <UpdateHabit
         isOpen={isUpdateOpen}
         onClose={onUpdateClose}
         habit={habit}
@@ -52,7 +52,7 @@ export const Habit = ({ habit, refetch }) => {
       <Button onClick={onDeleteOpen} size="sm" ml={1}>
         <Icon as={FiTrash2} />
       </Button>
-      <DeleteModal
+      <DeleteHabit
         isOpen={isDeleteOpen}
         onClose={onDeleteClose}
         habit={habit}

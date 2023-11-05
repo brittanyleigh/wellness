@@ -91,6 +91,7 @@ model ToDo {
     link            String?
     priority        Int?
     completed       Boolean     @default(false)
+    dueDate         DateTime?
 
     user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

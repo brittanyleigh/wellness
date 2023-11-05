@@ -1,10 +1,11 @@
 import { useSession } from "next-auth/react";
 import Loader from "@lib/components/Loader";
 import superagent from "superagent";
-import { useState } from "react";
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
   Button,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,24 +15,19 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 
-export const UpdateModal = ({ isOpen, onClose, habit, refetch }) => {
+export const DeleteHabit = ({ isOpen, onClose, habit, refetch }) => {
   const { status } = useSession({
     required: false,
   });
-
-  const [label, setLabel] = useState(habit?.label);
-  const [length, setLength] = useState(habit?.length);
 
   if (status === "loading") {
     return <Loader />;
   }
 
-  const handleUpdateHabit = async (event) => {
+  const handleDeleteHabit = async (event) => {
     event.preventDefault();
-    const response = await superagent.post("/api/habit/update").send({
+    const response = await superagent.post("/api/habit/delete").send({
       id: habit.id,
-      label,
-      length,
     });
     refetch();
     onClose();
@@ -42,26 +38,25 @@ export const UpdateModal = ({ isOpen, onClose, habit, refetch }) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{habit?.label}</ModalHeader>
+          <ModalHeader>Are you sure?</ModalHeader>
           <ModalCloseButton />
-          <form onSubmit={handleUpdateHabit}>
+          <form onSubmit={handleDeleteHabit}>
             <ModalBody>
-              <Input
-                value={label}
-                onChange={(event) => setLabel(event.target.value)}
-              />
-              <Input
-                type="number"
-                value={length}
-                onChange={(event) => setLength(parseInt(event.target.value))}
-              />
+              <Alert status="error">
+                <AlertIcon />
+                <AlertDescription>
+                  This will permanately delete the habit{" "}
+                  <strong>{habit?.label}</strong> and cannot be undone.
+                </AlertDescription>
+              </Alert>
             </ModalBody>
-
             <ModalFooter>
               <Button colorScheme="gray" mr={3} onClick={onClose}>
                 Cancel
               </Button>
-              <Button type="submit">Update</Button>
+              <Button colorScheme="red" type="submit">
+                Yes, DELETE
+              </Button>
             </ModalFooter>
           </form>
         </ModalContent>

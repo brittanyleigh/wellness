@@ -15,9 +15,8 @@ import {
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import { FiEdit3, FiPlus } from "react-icons/fi";
-// import { UpdateModal } from "@lib/components/ToDo/UpdateModal";
 import { ToDo } from "@lib/components/ToDo";
-import { CreateModal } from "@lib/components/ToDo/CreateModal";
+import { CreateToDo } from "@lib/components/ToDo/CreateToDo";
 
 const ToDos = () => {
   const { status } = useSession({
@@ -51,7 +50,7 @@ const ToDos = () => {
           <Icon as={FiPlus} mr={1} />
           Create New ToDo
         </Button>
-        <CreateModal isOpen={isOpen} onClose={onClose} refetch={refetch} />
+        <CreateToDo isOpen={isOpen} onClose={onClose} refetch={refetch} />
       </AppLayout>
     </>
   );

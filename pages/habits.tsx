@@ -3,21 +3,11 @@ import { useSession } from "next-auth/react";
 import Loader from "@lib/components/Loader";
 import superagent from "superagent";
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Icon,
-  Input,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Button, Icon, useDisclosure } from "@chakra-ui/react";
 import { useQuery } from "react-query";
-import { FiEdit3, FiPlus } from "react-icons/fi";
-import { UpdateModal } from "@lib/components/Habit/UpdateModal";
+import { FiPlus } from "react-icons/fi";
 import { Habit } from "@lib/components/Habit";
-import { CreateModal } from "@lib/components/Habit/CreateModal";
+import { CreateHabit } from "@lib/components/Habit/CreateHabit";
 
 const Page = () => {
   const { status } = useSession({
@@ -28,9 +18,6 @@ const Page = () => {
 
     return data.body;
   });
-
-  const [label, setLabel] = useState("");
-  const [length, setLength] = useState(5);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -52,7 +39,7 @@ const Page = () => {
           <Icon as={FiPlus} mr={1} />
           Create New Habit
         </Button>
-        <CreateModal isOpen={isOpen} onClose={onClose} refetch={refetch} />
+        <CreateHabit isOpen={isOpen} onClose={onClose} refetch={refetch} />
       </AppLayout>
     </>
   );

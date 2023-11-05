@@ -5,6 +5,7 @@ import { useState } from "react";
 import {
   Button,
   FormControl,
+  FormHelperText,
   FormLabel,
   Input,
   Modal,
@@ -14,14 +15,16 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
 } from "@chakra-ui/react";
 
-export const CreateModal = ({ isOpen, onClose, refetch }) => {
+export const CreateToDo = ({ isOpen, onClose, refetch }) => {
   const { status } = useSession({
     required: false,
   });
 
   const [label, setLabel] = useState("");
+  const [dueDate, setDueDate] = useState("");
 
   if (status === "loading") {
     return <Loader />;
@@ -31,10 +34,23 @@ export const CreateModal = ({ isOpen, onClose, refetch }) => {
     event.preventDefault();
     const response = await superagent.post("/api/toDo/create").send({
       label,
+      dueDate,
     });
     refetch();
     onClose();
   };
+
+  const Optional = () => (
+    <Text
+      fontStyle="italic"
+      color="gray.500"
+      fontSize="xs"
+      display="inline"
+      ml={2}
+    >
+      (optional)
+    </Text>
+  );
 
   return (
     <>
@@ -45,12 +61,20 @@ export const CreateModal = ({ isOpen, onClose, refetch }) => {
           <ModalCloseButton />
           <form onSubmit={handleCreateToDo}>
             <ModalBody>
-              <FormControl mb={3}>
+              <FormControl mb={3} isRequired>
                 <FormLabel>Name</FormLabel>
                 <Input
                   value={label}
                   placeholder="Ex: Meditate"
                   onChange={(event) => setLabel(event.target.value)}
+                />
+              </FormControl>
+              <FormControl mb={3}>
+                <FormLabel optionalIndicator={<Optional />}>Due Date</FormLabel>
+                <Input
+                  value={dueDate}
+                  type="date"
+                  onChange={(event) => setDueDate(event.target.value)}
                 />
               </FormControl>
             </ModalBody>

@@ -22,8 +22,8 @@ import {
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import { FiEdit3, FiTrash2 } from "react-icons/fi";
-import { UpdateModal } from "@lib/components/ToDo/UpdateModal";
-import { DeleteModal } from "@lib/components/ToDo/DeleteModal";
+import { UpdateToDo } from "@lib/components/ToDo/UpdateToDo";
+import { DeleteToDo } from "@lib/components/ToDo/DeleteToDo";
 
 export const ToDo = ({ toDo, refetch }) => {
   const {
@@ -43,7 +43,7 @@ export const ToDo = ({ toDo, refetch }) => {
       <Button onClick={onUpdateOpen} size="sm" ml={3}>
         <Icon as={FiEdit3} />
       </Button>
-      <UpdateModal
+      <UpdateToDo
         isOpen={isUpdateOpen}
         onClose={onUpdateClose}
         toDo={toDo}
@@ -52,7 +52,7 @@ export const ToDo = ({ toDo, refetch }) => {
       <Button onClick={onDeleteOpen} size="sm" ml={1}>
         <Icon as={FiTrash2} />
       </Button>
-      <DeleteModal
+      <DeleteToDo
         isOpen={isDeleteOpen}
         onClose={onDeleteClose}
         toDo={toDo}

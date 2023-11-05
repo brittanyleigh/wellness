@@ -15,7 +15,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 
-export const DeleteModal = ({ isOpen, onClose, habit, refetch }) => {
+export const DeleteToDo = ({ isOpen, onClose, toDo, refetch }) => {
   const { status } = useSession({
     required: false,
   });
@@ -24,10 +24,10 @@ export const DeleteModal = ({ isOpen, onClose, habit, refetch }) => {
     return <Loader />;
   }
 
-  const handleDeleteHabit = async (event) => {
+  const handleDeleteToDo = async (event) => {
     event.preventDefault();
-    const response = await superagent.post("/api/habit/delete").send({
-      id: habit.id,
+    const response = await superagent.post("/api/toDo/delete").send({
+      id: toDo.id,
     });
     refetch();
     onClose();
@@ -40,13 +40,13 @@ export const DeleteModal = ({ isOpen, onClose, habit, refetch }) => {
         <ModalContent>
           <ModalHeader>Are you sure?</ModalHeader>
           <ModalCloseButton />
-          <form onSubmit={handleDeleteHabit}>
+          <form onSubmit={handleDeleteToDo}>
             <ModalBody>
               <Alert status="error">
                 <AlertIcon />
                 <AlertDescription>
-                  This will permanately delete the habit{" "}
-                  <strong>{habit?.label}</strong> and cannot be undone.
+                  This will permanately delete the to do{" "}
+                  <strong>{toDo?.label}</strong> and cannot be undone.
                 </AlertDescription>
               </Alert>
             </ModalBody>

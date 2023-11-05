@@ -12,6 +12,7 @@ const post = async (req: NextApiRequest, res: NextApiResponse) => {
       data: {
         userId,
         label: req.body.label,
+        dueDate: new Date(req.body.dueDate),
       },
       select: {
         id: true,

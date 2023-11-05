@@ -18,9 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const includeInput = isEmpty(req.body?.include)
     ? undefined
     : req.body?.include;
-  const orderByInput = isEmpty(req.body?.orderBy)
-    ? undefined
-    : req.body?.orderBy;
+  const orderByInput = { dueDate: { sort: "asc", nulls: "last" } };
   const cursorInput = isEmpty(req.body?.cursor) ? undefined : req.body?.cursor;
   const takeInput = isEmpty(req.body?.take) ? undefined : req.body?.take;
   const skipInput = isEmpty(req.body?.skip) ? undefined : req.body?.skip;
@@ -38,7 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     skip: skipInput,
     distinct: distinctInput,
   };
-
+  //updatedAt: { sort: 'asc', nulls: 'last' },
   try {
     const toDos = await prisma.toDo.findMany(findManyArgs);
 
