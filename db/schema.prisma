@@ -57,6 +57,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     habits        Habit[]
+    toDos         ToDo[]
 }
 
 model VerificationToken {
@@ -78,6 +79,17 @@ model Habit {
     repeat          Boolean?
     enabled         Boolean     @default(true)
     lastCompleted   DateTime?
+
+    user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ToDo {
+    id              String      @id @default(cuid())
+    userId          String
+    label           String
+    description     String?
+    link            String?
+    priority        Int?
 
     user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

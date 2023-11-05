@@ -25,8 +25,8 @@ const AppLayout = (props) => {
       href: "/habits",
     },
     {
-      title: "Server",
-      href: "/server",
+      title: "To Dos",
+      href: "/toDos",
     },
     {
       title: "With Session",

@@ -15,22 +15,20 @@ import {
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import { FiEdit3, FiPlus } from "react-icons/fi";
-import { UpdateModal } from "@lib/components/Habit/UpdateModal";
-import { Habit } from "@lib/components/Habit";
-import { CreateModal } from "@lib/components/Habit/CreateModal";
+// import { UpdateModal } from "@lib/components/ToDo/UpdateModal";
+import { ToDo } from "@lib/components/ToDo";
+import { CreateModal } from "@lib/components/ToDo/CreateModal";
 
-const Page = () => {
+const ToDos = () => {
   const { status } = useSession({
     required: false,
   });
-  const habitsQuery = useQuery(["habit/list"], async () => {
-    const data = await superagent.get("/api/habit/list").send();
+
+  const toDosQuery = useQuery(["toDo/list"], async () => {
+    const data = await superagent.get("/api/toDo/list").send();
 
     return data.body;
   });
-
-  const [label, setLabel] = useState("");
-  const [length, setLength] = useState(5);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -38,25 +36,25 @@ const Page = () => {
     return <Loader />;
   }
 
-  const habits = habitsQuery.data;
-  console.log(habits);
+  const { data: toDos, refetch } = toDosQuery;
+  console.log(toDos);
 
   return (
     <>
       <AppLayout>
         <ul>
-          {habits?.map((habit) => {
-            return <Habit habit={habit} key={habit.id} />;
+          {toDos?.map((toDo) => {
+            return <ToDo toDo={toDo} key={toDo.id} refetch={refetch} />;
           })}
         </ul>
         <Button onClick={onOpen}>
           <Icon as={FiPlus} mr={1} />
-          Create New Habit
+          Create New ToDo
         </Button>
-        <CreateModal isOpen={isOpen} onClose={onClose} />
+        <CreateModal isOpen={isOpen} onClose={onClose} refetch={refetch} />
       </AppLayout>
     </>
   );
 };
 
-export default Page;
+export default ToDos;

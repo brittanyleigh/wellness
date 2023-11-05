@@ -220,7 +220,7 @@ export default Page;
 [ ] Mutations
 
 ** Habits **
-[ ] Create
+[x] Create
 [x] Delete
 [ ] Fix page refresh after update
 
