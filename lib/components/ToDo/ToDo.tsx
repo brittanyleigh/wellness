@@ -1,9 +1,10 @@
 import { useSession } from "next-auth/react";
 import Loader from "@lib/components/Loader";
 import superagent from "superagent";
-import { IconButton, Text } from "@chakra-ui/react";
+import { Box, Flex, IconButton, Tag, Text } from "@chakra-ui/react";
 import { FiCheckCircle, FiCircle } from "react-icons/fi";
 import { useState } from "react";
+import moment from "moment";
 
 export const ToDo = ({ toDo, refetch }) => {
   const { status } = useSession({
@@ -29,18 +30,25 @@ export const ToDo = ({ toDo, refetch }) => {
 
   return (
     <li key={toDo?.label}>
-      <IconButton
-        variant="ghost"
-        aria-label="Complete"
-        icon={isComplete ? <FiCheckCircle /> : <FiCircle />}
-        borderRadius="full"
-        mr={3}
-        onClick={() => handleToDoCompleted(toDo?.id)}
-        isDisabled={isComplete}
-      />
-      <Text as={isComplete ? "s" : "p"} display="inline">
-        {toDo?.label}
-      </Text>
+      <Flex alignItems="center">
+        <IconButton
+          variant="ghost"
+          aria-label="Complete"
+          icon={isComplete ? <FiCheckCircle /> : <FiCircle />}
+          borderRadius="full"
+          mr={3}
+          onClick={() => handleToDoCompleted(toDo?.id)}
+          isDisabled={isComplete}
+        />
+        <Text as={isComplete ? "s" : "p"} display="inline" mr={2}>
+          {toDo?.label}
+        </Text>
+        {toDo?.dueDate ? (
+          <Tag colorScheme="green">
+            DUE {moment(toDo?.dueDate).format("YYYY-MM-DD")}
+          </Tag>
+        ) : null}
+      </Flex>
     </li>
   );
 };

@@ -6,6 +6,7 @@ import { useState } from "react";
 import {
   Box,
   Button,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -18,6 +19,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Tag,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
@@ -39,25 +41,32 @@ export const ToDo = ({ toDo, refetch }) => {
 
   return (
     <Box my={3}>
-      {toDo.label}
-      <Button onClick={onUpdateOpen} size="sm" ml={3}>
-        <Icon as={FiEdit3} />
-      </Button>
-      <UpdateToDo
-        isOpen={isUpdateOpen}
-        onClose={onUpdateClose}
-        toDo={toDo}
-        refetch={refetch}
-      />
-      <Button onClick={onDeleteOpen} size="sm" ml={1}>
-        <Icon as={FiTrash2} />
-      </Button>
-      <DeleteToDo
-        isOpen={isDeleteOpen}
-        onClose={onDeleteClose}
-        toDo={toDo}
-        refetch={refetch}
-      />
+      <Flex alignItems="center">
+        {toDo.label}
+        {toDo?.dueDate ? (
+          <Tag ml={2} colorScheme="green">
+            DUE {new Date(toDo?.dueDate).toDateString()}
+          </Tag>
+        ) : null}
+        <Button onClick={onUpdateOpen} size="sm" ml={3}>
+          <Icon as={FiEdit3} />
+        </Button>
+        <UpdateToDo
+          isOpen={isUpdateOpen}
+          onClose={onUpdateClose}
+          toDo={toDo}
+          refetch={refetch}
+        />
+        <Button onClick={onDeleteOpen} size="sm" ml={1}>
+          <Icon as={FiTrash2} />
+        </Button>
+        <DeleteToDo
+          isOpen={isDeleteOpen}
+          onClose={onDeleteClose}
+          toDo={toDo}
+          refetch={refetch}
+        />
+      </Flex>
     </Box>
   );
 };

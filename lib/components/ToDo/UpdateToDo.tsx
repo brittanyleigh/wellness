@@ -4,6 +4,8 @@ import superagent from "superagent";
 import { useState } from "react";
 import {
   Button,
+  FormControl,
+  FormLabel,
   Input,
   Modal,
   ModalBody,
@@ -12,7 +14,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
 } from "@chakra-ui/react";
+import moment from "moment";
+import { log } from "console";
 
 export const UpdateToDo = ({ isOpen, onClose, toDo, refetch }) => {
   const { status } = useSession({
@@ -20,6 +25,9 @@ export const UpdateToDo = ({ isOpen, onClose, toDo, refetch }) => {
   });
 
   const [label, setLabel] = useState(toDo?.label);
+  const [dueDate, setDueDate] = useState(
+    toDo.dueDate ? moment(toDo?.dueDate).format("YYYY-MM-DD") : null
+  );
 
   if (status === "loading") {
     return <Loader />;
@@ -30,10 +38,23 @@ export const UpdateToDo = ({ isOpen, onClose, toDo, refetch }) => {
     const response = await superagent.post("/api/toDo/update").send({
       id: toDo.id,
       label,
+      dueDate,
     });
     refetch();
     onClose();
   };
+
+  const Optional = () => (
+    <Text
+      fontStyle="italic"
+      color="gray.500"
+      fontSize="xs"
+      display="inline"
+      ml={2}
+    >
+      (optional)
+    </Text>
+  );
 
   return (
     <>
@@ -44,10 +65,21 @@ export const UpdateToDo = ({ isOpen, onClose, toDo, refetch }) => {
           <ModalCloseButton />
           <form onSubmit={handleUpdateToDo}>
             <ModalBody>
-              <Input
-                value={label}
-                onChange={(event) => setLabel(event.target.value)}
-              />
+              <FormControl mb={3}>
+                <FormLabel>Name</FormLabel>
+                <Input
+                  value={label}
+                  onChange={(event) => setLabel(event.target.value)}
+                />
+              </FormControl>
+              <FormControl mb={3}>
+                <FormLabel optionalIndicator={<Optional />}>Due Date</FormLabel>
+                <Input
+                  value={dueDate}
+                  type="date"
+                  onChange={(event) => setDueDate(event.target.value)}
+                />
+              </FormControl>
             </ModalBody>
 
             <ModalFooter>

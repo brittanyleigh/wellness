@@ -6,7 +6,6 @@ import { getSession } from "@lib/auth/session";
 const post = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req });
   const userId = session?.user?.id;
-  console.log("update update");
 
   try {
     const habi = await prisma.habit.update({

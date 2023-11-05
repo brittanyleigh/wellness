@@ -36,7 +36,6 @@ const ToDos = () => {
   }
 
   const { data: toDos, refetch } = toDosQuery;
-  console.log(toDos);
 
   return (
     <>

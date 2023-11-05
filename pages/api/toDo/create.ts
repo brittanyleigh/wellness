@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
 import prisma from "@db";
 import { getSession } from "@lib/auth/session";
+import moment from "moment";
 
 const post = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req });
@@ -12,7 +13,7 @@ const post = async (req: NextApiRequest, res: NextApiResponse) => {
       data: {
         userId,
         label: req.body.label,
-        dueDate: req.body.dueDate ? new Date(req.body.dueDate) : null,
+        dueDate: req.body.dueDate ? moment(req.body.dueDate).toDate() : null,
       },
       select: {
         id: true,

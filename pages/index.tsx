@@ -13,6 +13,11 @@ import {
   VStack,
   Text,
   Icon,
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
 } from "@chakra-ui/react";
 import { IoMdPause, IoMdPlay, IoMdShuffle } from "react-icons/io";
 import { GrPowerReset } from "react-icons/gr";
@@ -78,6 +83,7 @@ const Page = () => {
   const { data: toDos, refetch } = toDosQuery;
 
   const topThreeToDos = toDos?.slice(0, 3);
+  const otherToDos = toDos?.slice(3);
 
   useEffect(() => {
     if (habits && habits.length) {
@@ -213,8 +219,27 @@ const Page = () => {
             return <ToDo toDo={toDo} refetch={refetch} key={toDo.id} />;
           })}
         </ul>
-        {toDos.length > 3 &&
-          `${toDos.length - 3} more To Do${toDos.length - 3 === 1 ? "" : "s"}`}
+        {toDos?.length > 3 && (
+          <Accordion allowToggle>
+            <AccordionItem>
+              <AccordionButton>
+                <Box as="span" flex="1" textAlign="left">
+                  {toDos.length - 3} More To Do
+                  {toDos.length - 3 === 1 ? "" : "s"}
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel pb={4}>
+                <ul>
+                  {otherToDos?.map((toDo) => {
+                    return <ToDo toDo={toDo} refetch={refetch} key={toDo.id} />;
+                  })}
+                </ul>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        )}
+        {/* `${toDos.length - 3} more To Do${toDos.length - 3 === 1 ? "" : "s"}`} */}
       </AppLayout>
     </>
   );
