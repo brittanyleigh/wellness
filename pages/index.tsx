@@ -19,10 +19,10 @@ import { GrPowerReset } from "react-icons/gr";
 import { RxShuffle } from "react-icons/rx";
 import { LuTimer } from "react-icons/lu";
 import { GiPartyPopper } from "react-icons/gi";
+import { ToDo } from "@lib/components/ToDo/ToDo";
 
 const Page = () => {
   const [habitList, setHabitList] = useState([]);
-  const [toDoList, setToDoList] = useState([]);
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [seconds, setSeconds] = useState(300);
   const [downtimeIsRunning, setDowntimeIsRunning] = useState(false);
@@ -75,7 +75,7 @@ const Page = () => {
   };
 
   const habits = habitsQuery.data;
-  const toDos = toDosQuery.data;
+  const { data: toDos, refetch } = toDosQuery;
 
   const topThreeToDos = toDos?.slice(0, 3);
 
@@ -209,10 +209,12 @@ const Page = () => {
           </VStack>
         </Center>
         <ul>
-          {topThreeToDos?.map((h) => {
-            return <li key={h?.label}>{h?.label}</li>;
+          {topThreeToDos?.map((toDo) => {
+            return <ToDo toDo={toDo} refetch={refetch} key={toDo.id} />;
           })}
         </ul>
+        {toDos.length > 3 &&
+          `${toDos.length - 3} more To Do${toDos.length - 3 === 1 ? "" : "s"}`}
       </AppLayout>
     </>
   );
@@ -228,15 +230,5 @@ export default Page;
 [ ] Styling
 [ ] Authentication etc
 [ ] Clean up - pull out components, etc
-
-** To Do List component **
-[x] To Do models
-[x] Queries
-[x] Mutations
-
-** Habits **
-[x] Create
-[x] Delete
-[x] Fix page refresh after update
 
 */

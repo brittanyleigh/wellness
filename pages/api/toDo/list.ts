@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const selectInput = isEmpty(req.body?.select) ? undefined : req.body?.select;
-  const whereInput = isEmpty(req.body?.where) ? undefined : req.body?.where;
+  const whereInput = { completed: false };
   const includeInput = isEmpty(req.body?.include)
     ? undefined
     : req.body?.include;
@@ -36,7 +36,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     skip: skipInput,
     distinct: distinctInput,
   };
-  //updatedAt: { sort: 'asc', nulls: 'last' },
   try {
     const toDos = await prisma.toDo.findMany(findManyArgs);
 
