@@ -14,7 +14,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 
-export const UpdateModal = ({ isOpen, onClose, habit }) => {
+export const UpdateModal = ({ isOpen, onClose, habit, refetch }) => {
   const { status } = useSession({
     required: false,
   });
@@ -26,12 +26,15 @@ export const UpdateModal = ({ isOpen, onClose, habit }) => {
     return <Loader />;
   }
 
-  const handleUpdateHabit = async () => {
+  const handleUpdateHabit = async (event) => {
+    event.preventDefault();
     const response = await superagent.post("/api/habit/update").send({
       id: habit.id,
       label,
       length,
     });
+    refetch();
+    onClose();
   };
 
   return (

@@ -15,7 +15,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 
-export const DeleteModal = ({ isOpen, onClose, habit }) => {
+export const DeleteModal = ({ isOpen, onClose, habit, refetch }) => {
   const { status } = useSession({
     required: false,
   });
@@ -24,10 +24,13 @@ export const DeleteModal = ({ isOpen, onClose, habit }) => {
     return <Loader />;
   }
 
-  const handleDeleteHabit = async () => {
+  const handleDeleteHabit = async (event) => {
+    event.preventDefault();
     const response = await superagent.post("/api/habit/delete").send({
       id: habit.id,
     });
+    refetch();
+    onClose();
   };
 
   return (

@@ -22,6 +22,7 @@ import { GiPartyPopper } from "react-icons/gi";
 
 const Page = () => {
   const [habitList, setHabitList] = useState([]);
+  const [toDoList, setToDoList] = useState([]);
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [seconds, setSeconds] = useState(300);
   const [downtimeIsRunning, setDowntimeIsRunning] = useState(false);
@@ -29,6 +30,12 @@ const Page = () => {
 
   const habitsQuery = useQuery(["habit/list"], async () => {
     const data = await superagent.get("/api/habit/list").send();
+
+    return data.body;
+  });
+
+  const toDosQuery = useQuery(["toDo/list"], async () => {
+    const data = await superagent.get("/api/toDo/list").send();
 
     return data.body;
   });
@@ -68,6 +75,9 @@ const Page = () => {
   };
 
   const habits = habitsQuery.data;
+  const toDos = toDosQuery.data;
+
+  const topThreeToDos = toDos?.slice(0, 3);
 
   useEffect(() => {
     if (habits && habits.length) {
@@ -198,6 +208,11 @@ const Page = () => {
             )}
           </VStack>
         </Center>
+        <ul>
+          {topThreeToDos?.map((h) => {
+            return <li key={h?.label}>{h?.label}</li>;
+          })}
+        </ul>
       </AppLayout>
     </>
   );
@@ -215,13 +230,13 @@ export default Page;
 [ ] Clean up - pull out components, etc
 
 ** To Do List component **
-[ ] To Do models
-[ ] Queries
-[ ] Mutations
+[x] To Do models
+[x] Queries
+[x] Mutations
 
 ** Habits **
 [x] Create
 [x] Delete
-[ ] Fix page refresh after update
+[x] Fix page refresh after update
 
 */

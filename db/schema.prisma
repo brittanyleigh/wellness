@@ -90,6 +90,7 @@ model ToDo {
     description     String?
     link            String?
     priority        Int?
+    completed       Boolean     @default(false)
 
     user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

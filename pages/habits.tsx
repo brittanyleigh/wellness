@@ -38,22 +38,21 @@ const Page = () => {
     return <Loader />;
   }
 
-  const habits = habitsQuery.data;
-  console.log(habits);
+  const { data: habits, refetch } = habitsQuery;
 
   return (
     <>
       <AppLayout>
         <ul>
           {habits?.map((habit) => {
-            return <Habit habit={habit} key={habit.id} />;
+            return <Habit habit={habit} key={habit.id} refetch={refetch} />;
           })}
         </ul>
         <Button onClick={onOpen}>
           <Icon as={FiPlus} mr={1} />
           Create New Habit
         </Button>
-        <CreateModal isOpen={isOpen} onClose={onClose} />
+        <CreateModal isOpen={isOpen} onClose={onClose} refetch={refetch} />
       </AppLayout>
     </>
   );

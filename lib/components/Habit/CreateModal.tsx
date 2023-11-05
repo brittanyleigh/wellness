@@ -16,7 +16,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 
-export const CreateModal = ({ isOpen, onClose }) => {
+export const CreateModal = ({ isOpen, onClose, refetch }) => {
   const { status } = useSession({
     required: false,
   });
@@ -29,10 +29,13 @@ export const CreateModal = ({ isOpen, onClose }) => {
   }
 
   const handleCreateHabit = async (event) => {
+    event.preventDefault();
     const response = await superagent.post("/api/habit/create").send({
       label,
       length,
     });
+    refetch();
+    onClose();
   };
 
   return (

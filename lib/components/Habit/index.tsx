@@ -25,7 +25,7 @@ import { FiEdit3, FiTrash2 } from "react-icons/fi";
 import { UpdateModal } from "@lib/components/Habit/UpdateModal";
 import { DeleteModal } from "@lib/components/Habit/DeleteModal";
 
-export const Habit = ({ habit }) => {
+export const Habit = ({ habit, refetch }) => {
   const {
     isOpen: isUpdateOpen,
     onOpen: onUpdateOpen,
@@ -47,6 +47,7 @@ export const Habit = ({ habit }) => {
         isOpen={isUpdateOpen}
         onClose={onUpdateClose}
         habit={habit}
+        refetch={refetch}
       />
       <Button onClick={onDeleteOpen} size="sm" ml={1}>
         <Icon as={FiTrash2} />
@@ -55,6 +56,7 @@ export const Habit = ({ habit }) => {
         isOpen={isDeleteOpen}
         onClose={onDeleteClose}
         habit={habit}
+        refetch={refetch}
       />
     </Box>
   );
