@@ -14,9 +14,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
-import { FiEdit3 } from "react-icons/fi";
+import { FiEdit3, FiPlus } from "react-icons/fi";
 import { UpdateModal } from "@lib/components/Habit/UpdateModal";
 import { Habit } from "@lib/components/Habit";
+import { CreateModal } from "@lib/components/Habit/CreateModal";
 
 const Page = () => {
   const { status } = useSession({
@@ -30,6 +31,8 @@ const Page = () => {
 
   const [label, setLabel] = useState("");
   const [length, setLength] = useState(5);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (status === "loading") {
     return <Loader />;
@@ -56,24 +59,11 @@ const Page = () => {
             return <Habit habit={habit} key={habit.id} />;
           })}
         </ul>
-        {/* <form onSubmit={handleCreateHabit}>
-          <FormControl>
-            <FormLabel>Label</FormLabel>
-            <Input
-              value={label}
-              onChange={(event) => setLabel(event.target.value)}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Length</FormLabel>
-            <Input
-              type="number"
-              value={length}
-              onChange={(event) => setLength(parseInt(event.target.value))}
-            />
-          </FormControl>
-          <Button type="submit">Create</Button>
-        </form> */}
+        <Button onClick={onOpen}>
+          <Icon as={FiPlus} mr={1} />
+          Create New Habit
+        </Button>
+        <CreateModal isOpen={isOpen} onClose={onClose} />
       </AppLayout>
     </>
   );
