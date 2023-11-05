@@ -7,27 +7,25 @@ import {
   Box,
   Button,
   Center,
-  Flex,
   HStack,
   Heading,
   Input,
   VStack,
   Text,
-  useToken,
   Icon,
 } from "@chakra-ui/react";
 import { IoMdPause, IoMdPlay, IoMdShuffle } from "react-icons/io";
 import { GrPowerReset } from "react-icons/gr";
 import { RxShuffle } from "react-icons/rx";
 import { LuTimer } from "react-icons/lu";
+import { GiPartyPopper } from "react-icons/gi";
 
 const Page = () => {
-  const [label, setLabel] = useState("");
-  const [length, setLength] = useState(5);
   const [habitList, setHabitList] = useState([]);
   const [timerIsRunning, setTimerIsRunning] = useState(false);
   const [seconds, setSeconds] = useState(300);
   const [downtimeIsRunning, setDowntimeIsRunning] = useState(false);
+  const [downtimeIsFinished, setDowntimeIsFinished] = useState(false);
 
   const habitsQuery = useQuery(["habit/list"], async () => {
     const data = await superagent.get("/api/habit/list").send();
@@ -45,10 +43,6 @@ const Page = () => {
       options = list ? list.filter((h) => h.length <= timer) : [];
     }
     return options;
-  };
-
-  const getOptions = (list, minutes) => {
-    return list ? list.filter((h) => h?.length === minutes) : [];
   };
 
   const createTimerList = (list, timerSeconds) => {
@@ -74,7 +68,6 @@ const Page = () => {
   };
 
   const habits = habitsQuery.data;
-  // const habitList = createTimerList(habits, seconds) || [];
 
   useEffect(() => {
     if (habits && habits.length) {
@@ -82,29 +75,17 @@ const Page = () => {
     }
   }, [habits, seconds]);
 
-  console.log("HABIT LIST:", habitList);
-
-  // const handleCreateHabit = async () => {
-  //   const response = await superagent.post("/api/habit/create").send({
-  //     label,
-  //     length,
-  //   });
-  // };
-
-  // const handleUpdateHabit = async () => {
-  //   const response = await superagent.post("/api/habit/update").send({
-  //     id: habits[0].id,
-  //     label,
-  //     length,
-  //   });
-  // };
-
   return (
     <>
       <AppLayout>
         <Center>
           <VStack>
-            {!downtimeIsRunning && (
+            {downtimeIsFinished && (
+              <>
+                <Icon as={GiPartyPopper} boxSize={12} />
+              </>
+            )}
+            {!downtimeIsRunning && !downtimeIsFinished && (
               <>
                 <Heading size="md">Set-up Downtime</Heading>
                 <HStack w="8rem">
@@ -112,7 +93,9 @@ const Page = () => {
                     textAlign="center"
                     value={seconds / 60}
                     type="number"
-                    onChange={(event) => setSeconds(event.target.value * 60)}
+                    onChange={(event) =>
+                      setSeconds(parseInt(event.target.value) * 60)
+                    }
                   />
                   <Text>Minutes</Text>
                 </HStack>
@@ -150,6 +133,11 @@ const Page = () => {
                   strokeLinecap="butt"
                   onComplete={() => {
                     setTimerIsRunning(false);
+                    setDowntimeIsRunning(false);
+                    setDowntimeIsFinished(true);
+                    setTimeout(() => {
+                      setDowntimeIsFinished(false);
+                    }, 10000);
                     return {
                       shouldRepeat: true,
                       delay: 1.5,
@@ -175,20 +163,33 @@ const Page = () => {
                 <Button
                   onClick={() => setTimerIsRunning((current) => !current)}
                 >
-                  {timerIsRunning ? <IoMdPause /> : <IoMdPlay />}
+                  {timerIsRunning ? (
+                    <>
+                      <Icon as={IoMdPause} mr={1} /> Pause
+                    </>
+                  ) : (
+                    <>
+                      <Icon as={IoMdPlay} mr={1} /> Play
+                    </>
+                  )}
+                </Button>
+                <Button
+                  onClick={() => {
+                    setDowntimeIsRunning((current) => !current);
+                    setTimerIsRunning((current) => !current);
+                  }}
+                >
+                  <Icon as={GrPowerReset} mr={1} /> Reset
                 </Button>
               </>
             )}
             {!downtimeIsRunning && (
               <>
-                {/* <Button
-                  onClick={() => setDowntimeIsRunning((current) => !current)}
-                >
-                  <Icon as={LuTimer} mr={1} />
-                  Start Timer
-                </Button> */}
                 <Button
-                  onClick={() => setDowntimeIsRunning((current) => !current)}
+                  onClick={() => {
+                    setDowntimeIsRunning((current) => !current);
+                    setTimerIsRunning((current) => !current);
+                  }}
                 >
                   <Icon as={LuTimer} mr={1} />
                   Start Timer
@@ -197,21 +198,6 @@ const Page = () => {
             )}
           </VStack>
         </Center>
-
-        {/* <form>
-          <input
-            type="text"
-            onChange={(e) => setLabel(e.target.value)}
-            value={label}
-          />
-          <input
-            type="number"
-            onChange={(e) => setLength(parseInt(e.target.value))}
-            value={length}
-          />{" "}
-          seconds
-        </form>
-        <button onClick={handleCreateHabit}>Create Habit Test</button> */}
       </AppLayout>
     </>
   );
@@ -220,24 +206,22 @@ const Page = () => {
 export default Page;
 
 /* 
-Set up Chakra styles
-Style timer homepage
-Add input for timer length
-Logged out welcome page
-Homepage
-  - Timer
-  - Button to generate habits list
-Habits page
-  - Habits list
-  - Create new habit
-  - Update habits
-  - Delete habits
-Settings
-  - User info
-  - General settings 
-    - randomize / by priority
+//// TO DOs ////
 
+** General **
+[ ] Logged out welcome page
+[ ] Styling
+[ ] Authentication etc
+[ ] Clean up - pull out components, etc
 
+** To Do List component **
+[ ] To Do models
+[ ] Queries
+[ ] Mutations
 
-- Auth etc
+** Habits **
+[ ] Create
+[x] Delete
+[ ] Fix page refresh after update
+
 */

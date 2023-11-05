@@ -21,8 +21,8 @@ const AppLayout = (props) => {
       href: "/",
     },
     {
-      title: "Client",
-      href: "/client",
+      title: "Habits",
+      href: "/habits",
     },
     {
       title: "Server",
